@@ -1,26 +1,25 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Gameplay.Doors;
-using Gameplay.Player;
 using UnityEngine;
 
-public class GarageDoors : MonoBehaviour, IClickInteractable
+namespace Gameplay.Doors
 {
-    [SerializeField] private PlayerRaycast _playerRaycast;
-    [SerializeField] private Door[] _doors;
-
-    private bool Openned;
-
-    public void Interact()
+    public class GarageDoors : MonoBehaviour, IClickInteractable
     {
-        
-        foreach (var door in _doors)
+        [SerializeField] private Door[] doors;
+
+        private bool _openned;
+
+        public void Interact()
         {
-            door.Open();
-            Openned = true;
+            if (_openned)
+                return;
+        
+            foreach (var door in doors)
+            {
+                door.Open();
+                _openned = true;
+            }
         }
+    
+    
     }
-    
-    
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Infrastructure.Services;
 using UnityEngine;
 using Zenject;
 
@@ -9,13 +10,13 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private float sensitivity = 2.0f; 
     [SerializeField] private float maxYAngle = 80.0f; 
     
-    private float rotationX = 0.0f;
-    private InputService _inputService;
+    private float _rotationX = 0.0f;
+    private StandaloneInputService _inputService;
 
     [Inject]
-    public void Construct(InputService inputService)
+    public void Construct(StandaloneInputService inputService)
     {
-        _inputService = inputService;
+        this._inputService = inputService;
     }
 
     private void Start()
@@ -26,15 +27,17 @@ public class PlayerCamera : MonoBehaviour
 
     private void Update()
     {
-        float mouseX = Input.GetAxis("Mouse X");
-        float mouseY = Input.GetAxis("Mouse Y");
+        var mouseDirection = _inputService.GetMouseDirection();
+        
+        float mouseX = mouseDirection.x;
+        float mouseY = mouseDirection.y;
 
 
         transform.parent.Rotate(Vector3.up * mouseX * sensitivity);
         
 
-        rotationX -= mouseY * sensitivity;
-        rotationX = Mathf.Clamp(rotationX, -maxYAngle, maxYAngle);
-        transform.localRotation = Quaternion.Euler(rotationX, 0.0f, 0.0f);
+        _rotationX -= mouseY * sensitivity;
+        _rotationX = Mathf.Clamp(_rotationX, -maxYAngle, maxYAngle);
+        transform.localRotation = Quaternion.Euler(_rotationX, 0.0f, 0.0f);
     }
 }

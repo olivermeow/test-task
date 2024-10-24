@@ -1,26 +1,31 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Gameplay.Items;
+using Gameplay.Player;
 using UnityEngine;
 
-public class TruckItemGroup : MonoBehaviour, IClickInteractable
+namespace Gameplay.Truck
 {
-    [SerializeField] private PlayerHands _playerHands;
-
-    [SerializeField] private List<ItemPlace> _itemPlaces;
-    public void Interact()
+    public class TruckItemGroup : MonoBehaviour, IClickInteractable
     {
-        if (_playerHands.TryTake(out Item item))
-        {
-            var freePlace = _itemPlaces.FirstOrDefault(place => place.Occupied == false);
-            
-            if (freePlace == null)
-                return;
+        [SerializeField] private PlayerHands playerHands;
 
-            item.transform.parent = freePlace.transform.parent;
-            item.transform.rotation = freePlace.transform.rotation;
-            freePlace.Put(item);
+        [SerializeField] private List<ItemPlace> itemPlaces;
+        public void Interact()
+        {
+            if (playerHands.TryTake(out Item item))
+            {
+                var freePlace = itemPlaces.FirstOrDefault(place => place.Occupied == false);
+            
+                if (freePlace == null)
+                    return;
+
+                var itemTransform = item.transform;
+                var freePlaceTransform = freePlace.transform;
+                itemTransform.parent = freePlaceTransform.parent;
+                itemTransform.rotation = freePlaceTransform.rotation;
+                freePlace.Put(item);
+            }
         }
     }
 }
