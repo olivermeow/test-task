@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,7 +17,13 @@ public class PlayerCamera : MonoBehaviour
     {
         _inputService = inputService;
     }
-    
+
+    private void Start()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
     private void Update()
     {
         float mouseX = Input.GetAxis("Mouse X");
